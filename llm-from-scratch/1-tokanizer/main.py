@@ -1,4 +1,4 @@
-from tokenizer import read_raw_text, tokanize, create_vocab, SimpleTokenizerV1
+from tokenizer import read_raw_text, tokanize, create_vocab, SimpleTokenizer
 
 if __name__ == "__main__":
     text = read_raw_text("the-verdict.txt")
@@ -6,10 +6,15 @@ if __name__ == "__main__":
 
     _, vocab = create_vocab(tokens)
 
-    tokenizer = SimpleTokenizerV1(vocab)
+    tokenizer = SimpleTokenizer(vocab)
 
-    text = """"It's the last he painted, you know," Mrs. Gisburn said with pardonable pride."""
+    text1 = "Hello, do you like tea?"
+    text2 = "In the sunlit terraces of the palace."
+    text = " <|endoftext|> ".join((text1, text2))
+    print(text)
+
 
     ids = tokenizer.encode(text)
-
+    
     print(ids)
+    print(tokenizer.decode(ids))

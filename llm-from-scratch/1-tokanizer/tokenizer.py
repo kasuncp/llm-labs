@@ -15,21 +15,23 @@ def tokanize(raw_text):
 
 
 def create_vocab(tokens):
-    all_words = sorted(set(tokens))
-    vocab_size = len(all_words)
+    all_tokens = sorted(set(tokens))
+    all_tokens.extend(["<|endoftext|>", "<|unk|>"])
+    vocab_size = len(all_tokens)
 
-    vocab = {token:i for i,token in enumerate(all_words)}
+    vocab = {token:i for i,token in enumerate(all_tokens)}
 
     return [vocab_size, vocab]
 
 
-class SimpleTokenizerV1:
+class SimpleTokenizer:
     def __init__(self, vocab):
         self.str_to_int = vocab
         self.int_to_str = {i:s for s,i in vocab.items()}
 
     def encode(self, text):
         preprocessed = tokanize(text)
+        preprocessed = [item if item in self.str_to_int else "<|unk|>" for item in preprocessed]
         ids = [self.str_to_int[s] for s in preprocessed]
         return ids
 
