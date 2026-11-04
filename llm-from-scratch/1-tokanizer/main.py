@@ -1,20 +1,16 @@
 from tokenizer import read_raw_text, tokanize, create_vocab, SimpleTokenizer
+from dataloader import create_dataloader_v1
 
 if __name__ == "__main__":
-    text = read_raw_text("the-verdict.txt")
-    tokens = tokanize(text)
+    raw_text = read_raw_text("the-verdict.txt")
 
-    _, vocab = create_vocab(tokens)
-
-    tokenizer = SimpleTokenizer(vocab)
-
-    text1 = "Hello, do you like tea?"
-    text2 = "In the sunlit terraces of the palace."
-    text = " <|endoftext|> ".join((text1, text2))
-    print(text)
-
-
-    ids = tokenizer.encode(text)
-    
-    print(ids)
-    print(tokenizer.decode(ids))
+    dataloader = create_dataloader_v1(
+        raw_text,
+        batch_size=1,
+        max_length=4,
+        stride=1,
+        shuffle=False
+    )
+    data_iter = iter(dataloader)
+    first_batch = next(data_iter)
+    print(first_batch)
