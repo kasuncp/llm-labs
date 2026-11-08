@@ -1,4 +1,5 @@
 import torch
+from causal_attention import CausalAttention
 
 inputs = torch.tensor(
     [[0.43, 0.15, 0.89],
@@ -17,7 +18,7 @@ attn_scores = inputs @ inputs.T
 attn_weights = torch.softmax(attn_scores, dim=-1)
 context_vecs = attn_weights @ inputs
 
-print(context_vecs)
+# print(context_vecs)
 
 # Self-attention with trainable weights
 # =====================================
@@ -34,3 +35,16 @@ x_2 = inputs[1]
 q_2 = x_2 @ W_query
 k_2 = x_2 @ W_key
 v_2 = x_2 @ W_value
+
+# Causal attention
+# ================
+
+batch = torch.stack((inputs, inputs), dim=0)
+
+torch.manual_seed(123)
+context_length = batch.shape[1]
+
+ca = CausalAttention(d_in, d_out, context_length, 0.0)
+context_vecs = ca(batch)
+
+print(context_vecs)
